@@ -1,135 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- ===========================================================
-     TERMINAL · Glifos y complicacion
-     Terminal v0 completa.
-     Elementos nuevos en esta capa: Line, Stroke, ComplicationSlot, DefaultProviderPolicy, Complication
-     Lienzo 450x450. Valida antes de compilar:
-       java -jar wff-validator.jar 4 watchface.xml
-     =========================================================== -->
 <WatchFace width="450" height="450" clipShape="CIRCLE">
-
     <Metadata key="CLOCK_TYPE" value="ANALOG" />
     <Metadata key="PREVIEW_TIME" value="10:09:30" />
 
     <Scene backgroundColor="#ff000000">
+        <!-- ponytail: bloque fijo arriba a la izquierda; usar Condition con
+             cuatro anclas solo si el solapamiento con agujas resulta molesto. -->
+        <Group name="terminal_block" x="68" y="104" width="180" height="112">
+            <PartImage name="pixel_icons" x="0" y="0" width="54" height="104" alpha="255">
+                <Variant mode="AMBIENT" target="alpha" value="0" />
+                <Image resource="terminal_icons" />
+            </PartImage>
 
-        <!-- LOGO EN DOS CAPAS. Los ojos van aparte para poder tenirlos:
-             asi el logo sigue el acento en vez de quedarse naranja fijo.
-             Exportados a 33x42, su tamano real: la memoria se cuenta por
-             los pixeles del archivo, no por los que se ven. -->
-        <PartImage name="logo_cuerpo" x="68" y="126" width="33" height="42" alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Image resource="fantasma_cuerpo" />
-        </PartImage>
+            <PartText name="head" x="40" y="0" width="140" height="22" alpha="255">
+                <Variant mode="AMBIENT" target="alpha" value="0" />
+                <Text align="START" ellipsis="FALSE">
+                    <Font family="silkscreen_regular" size="17" color="#ffFF6B00">
+                        <Template>%s<Parameter expression="terminal_head" /></Template>
+                    </Font>
+                </Text>
+            </PartText>
 
-        <PartImage name="logo_ojos" x="68" y="126" width="33" height="42" alpha="255"
-                   tintColor="#ffFF6B00">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Image resource="fantasma_ojos" />
-        </PartImage>
+            <PartText name="date" x="60" y="22" width="120" height="22" alpha="255">
+                <Localization locales="es-MX" />
+                <Variant mode="AMBIENT" target="color" value="#ff7A7A74" />
+                <Text align="START" ellipsis="FALSE">
+                    <Font family="silkscreen_regular" size="16" color="#ffD9D7CE">
+                        <Lower>
+                            <Template>%s %d %s
+                                <Parameter expression="[DAY_OF_WEEK_S]" />
+                                <Parameter expression="[DAY]" />
+                                <Parameter expression="[MONTH_S]" />
+                            </Template>
+                        </Lower>
+                    </Font>
+                </Text>
+            </PartText>
 
-        <PartText name="head" x="110" y="100" width="140" height="26" alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Text align="START" ellipsis="FALSE">
-                <Font family="monospace" size="18" weight="NORMAL"
-                      slant="NORMAL" color="#ffFF6B00">
-                    D4n@gw7
-                </Font>
-            </Text>
-        </PartText>
+            <PartText name="temperature" x="60" y="43" width="120" height="22" alpha="255">
+                <Variant mode="AMBIENT" target="alpha" value="0" />
+                <Text align="START" ellipsis="FALSE">
+                    <Font family="silkscreen_regular" size="16" color="#ffD9D7CE">
+                        <Template>%s<Parameter expression="terminal_temperature" /></Template>
+                    </Font>
+                </Text>
+            </PartText>
 
-        <!-- GLIFOS DE TRAZO. Solo Line, Ellipse y RoundRectangle:
-             cero imagenes, cero memoria. -->
-        <PartDraw name="ico_cal" x="110" y="128" width="18" height="18" alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <RoundRectangle x="2" y="3.6" width="14" height="12.4"
-                            cornerRadiusX="2.2" cornerRadiusY="2.2">
-                <Stroke color="#ff6E6E68" thickness="1.6" />
-            </RoundRectangle>
-            <Line startX="2" startY="7.6" endX="16" endY="7.6">
-                <Stroke color="#ff6E6E68" thickness="1.6" />
-            </Line>
-            <Line startX="6" startY="2" endX="6" endY="5.2">
-                <Stroke color="#ff6E6E68" thickness="1.9" cap="ROUND" />
-            </Line>
-            <Line startX="12" startY="2" endX="12" endY="5.2">
-                <Stroke color="#ff6E6E68" thickness="1.9" cap="ROUND" />
-            </Line>
-        </PartDraw>
+            <PartText name="battery" x="60" y="64" width="120" height="22" alpha="255">
+                <Variant mode="AMBIENT" target="alpha" value="0" />
+                <Text align="START" ellipsis="FALSE">
+                    <Font family="silkscreen_regular" size="16" color="#ffD9D7CE">
+                        <Template>%d%%<Parameter expression="round([BATTERY_PERCENT])" /></Template>
+                    </Font>
+                </Text>
+            </PartText>
 
-        <PartDraw name="ico_bat" x="110" y="152" width="18" height="18" alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <RoundRectangle x="1" y="5" width="13" height="8"
-                            cornerRadiusX="2.6" cornerRadiusY="2.6">
-                <Stroke color="#ff6E6E68" thickness="1.6" />
-            </RoundRectangle>
-            <RoundRectangle x="14" y="6.4" width="2.4" height="5.2"
-                            cornerRadiusX="1.2" cornerRadiusY="1.2">
-                <Fill color="#ff6E6E68" />
-            </RoundRectangle>
-            <RoundRectangle x="3.3" y="7.3" width="2" height="3.4"
-                            cornerRadiusX="0.8" cornerRadiusY="0.8">
-                <Fill color="#ff6E6E68" />
-            </RoundRectangle>
-            <RoundRectangle x="6.5" y="7.3" width="2" height="3.4"
-                            cornerRadiusX="0.8" cornerRadiusY="0.8">
-                <Fill color="#ff6E6E68" />
-            </RoundRectangle>
-        </PartDraw>
+            <PartText name="meeting" x="60" y="85" width="120" height="22" alpha="255">
+                <Variant mode="AMBIENT" target="alpha" value="0" />
+                <Text align="START" ellipsis="FALSE">
+                    <Font family="silkscreen_regular" size="16" color="#ffFF6B00">
+                        <Template>%s<Parameter expression="terminal_meeting" /></Template>
+                    </Font>
+                </Text>
+            </PartText>
+        </Group>
 
-        <PartText name="bateria" x="134" y="150" width="120" height="24" alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Text align="START" ellipsis="FALSE">
-                <Font family="monospace" size="17" weight="NORMAL"
-                      slant="NORMAL" color="#ff8A8A84">
-                    <Template>%d%%
-                        <Parameter expression="round([BATTERY_PERCENT])" />
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-
-        <!-- FECHA. Es lo unico que sobrevive en ambient. -->
-        <PartText name="fecha" x="134" y="126" width="120" height="24" alpha="255">
-            <Variant mode="AMBIENT" target="color" value="#ff7A7A74" />
-            <Text align="START" ellipsis="FALSE">
-                <Font family="monospace" size="17" weight="NORMAL"
-                      slant="NORMAL" color="#ffD9D7CE">
-                    <Template>%s %d %s
-                        <Parameter expression="lower([DAY_OF_WEEK_S])" />
-                        <Parameter expression="[DAY]" />
-                        <Parameter expression="lower([MONTH_S])" />
-                    </Template>
-                </Font>
-            </Text>
-        </PartText>
-
-        <!-- SLOT LIBRE. Ponle temperatura o la proxima cita desde el
-             editor del reloj. Acepta texto corto y largo. -->
-        <ComplicationSlot name="dato" slotId="1"
-            x="110" y="174" width="140" height="26" alpha="255"
-            displayName="dato"
-            supportedTypes="SHORT_TEXT LONG_TEXT">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <DefaultProviderPolicy
-                defaultSystemProvider="WATCH_BATTERY"
-                defaultSystemProviderType="SHORT_TEXT" />
-            <BoundingBox x="0" y="0" width="140" height="26" />
-            <Complication type="SHORT_TEXT">
-                <PartText x="0" y="0" width="140" height="26">
-                    <Text align="START" ellipsis="TRUE">
-                        <Font family="monospace" size="17" weight="NORMAL"
-                              slant="NORMAL" color="#ff8A8A84">
-                            <Template>%s<Parameter expression="[COMPLICATION.TEXT]" /></Template>
-                        </Font>
-                    </Text>
-                </PartText>
-            </Complication>
-        </ComplicationSlot>
-
-        <!-- AGUJAS FILAMENTO. WFF v4 dibuja las tres como PartDraw:
-             las manos especializadas solo aceptan recursos de imagen. -->
-        <PartDraw name="aguja_hora" x="221" y="97" width="7" height="128"
+        <PartDraw name="hour_hand" x="221" y="97" width="7" height="128"
                   pivotX="0.5" pivotY="1.0">
             <Transform target="angle" value="[HOUR_0_11_MINUTE] * 30" />
             <RoundRectangle x="0" y="0" width="7" height="128"
@@ -138,7 +74,7 @@
             </RoundRectangle>
         </PartDraw>
 
-        <PartDraw name="aguja_minuto" x="221" y="19" width="7" height="206"
+        <PartDraw name="minute_hand" x="221" y="19" width="7" height="206"
                   pivotX="0.5" pivotY="1.0">
             <Transform target="angle" value="[MINUTE_SECOND] * 6" />
             <RoundRectangle x="0" y="0" width="7" height="206"
@@ -147,22 +83,51 @@
             </RoundRectangle>
         </PartDraw>
 
-        <PartDraw name="segundero" x="212" y="14" width="26" height="211"
-                  pivotX="0.5" pivotY="1.0" alpha="255">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Transform target="angle" value="[SECOND] * 6" />
-            <RoundRectangle x="0" y="0" width="26" height="26"
-                            cornerRadiusX="10" cornerRadiusY="10">
-                <Fill color="#ffFF6B00" />
-            </RoundRectangle>
-        </PartDraw>
-
-        <PartDraw name="pivote" x="213" y="213" width="24" height="24" alpha="255">
+        <PartDraw name="pivot" x="213" y="213" width="24" height="24" alpha="255">
             <RoundRectangle x="0" y="0" width="24" height="24"
                             cornerRadiusX="9" cornerRadiusY="9">
                 <Fill color="#ffEDE9DC" />
             </RoundRectangle>
         </PartDraw>
 
+        <PartDraw name="cursor_tail_far" x="219" y="8" width="12" height="217"
+                  pivotX="0.5" pivotY="1.0" alpha="76">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
+            <Transform target="angle" value="[SECOND] * 6 - 7" />
+            <RoundRectangle x="3.5" y="3.5" width="5" height="5"
+                            cornerRadiusX="1" cornerRadiusY="1">
+                <Fill color="#ffFF6B00" />
+            </RoundRectangle>
+        </PartDraw>
+
+        <PartDraw name="cursor_tail_mid" x="219" y="8" width="12" height="217"
+                  pivotX="0.5" pivotY="1.0" alpha="140">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
+            <Transform target="angle" value="[SECOND] * 6 - 4.5" />
+            <RoundRectangle x="2.5" y="2.5" width="7" height="7"
+                            cornerRadiusX="1" cornerRadiusY="1">
+                <Fill color="#ffFF6B00" />
+            </RoundRectangle>
+        </PartDraw>
+
+        <PartDraw name="cursor_tail_near" x="219" y="8" width="12" height="217"
+                  pivotX="0.5" pivotY="1.0" alpha="204">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
+            <Transform target="angle" value="[SECOND] * 6 - 2" />
+            <RoundRectangle x="1.5" y="1.5" width="9" height="9"
+                            cornerRadiusX="1" cornerRadiusY="1">
+                <Fill color="#ffFF6B00" />
+            </RoundRectangle>
+        </PartDraw>
+
+        <PartDraw name="cursor" x="219" y="8" width="12" height="217"
+                  pivotX="0.5" pivotY="1.0" alpha="255">
+            <Variant mode="AMBIENT" target="alpha" value="0" />
+            <Transform target="angle" value="[SECOND] * 6" />
+            <RoundRectangle x="0" y="0" width="12" height="12"
+                            cornerRadiusX="1" cornerRadiusY="1">
+                <Fill color="#ffFF6B00" />
+            </RoundRectangle>
+        </PartDraw>
     </Scene>
 </WatchFace>
