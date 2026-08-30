@@ -1,4 +1,3 @@
 <resources>
-    <string name="watch_face_name">Complicaciones</string>
-    <string name="greeting">Hello, world!</string>
+    <string name="app_name">Terminal</string>
 </resources>

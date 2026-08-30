@@ -5,14 +5,14 @@
     <!-- Note: hasCode is required to be false for Watch Face Format -->
     <application
         android:hasCode="false"
-        android:label="@string/watch_face_name">
+        android:label="@string/app_name">
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
         <property
             android:name="com.google.wear.watchface.format.version"
-            android:value="1" />
+            android:value="4" />
 
         <!-- Optionally add details about the publisher. -->
         <!--
